@@ -1,23 +1,14 @@
 namespace SunamoStorage._sunamo.SunamoConverters.Converts;
 
-/// <summary>
-/// Converts text to a convention where every word starts with an uppercase character.
-/// </summary>
 internal class ConvertEveryWordLargeCharConvention
 {
-    private static bool IsSpecialChar(char character)
-    {
-        return new List<char>(['\\', '(', ')', ']', '[', '.', '\'']).Any(specialChar => specialChar == character);
-    }
+    private static bool IsSpecialChar(char character) =>
+        new List<char>(['\\', '(', ')', ']', '[', '.', '\'']).Any(specialChar => specialChar == character);
 
-    /// <summary>
-    /// Converts the given text to the every-word-large-char convention.
-    /// </summary>
-    /// <param name="text">The text to convert.</param>
     internal static string ToConvention(string text)
     {
         text = text.ToLower();
-        StringBuilder stringBuilder = new StringBuilder();
+        var stringBuilder = new StringBuilder();
         bool isNextUppercase = true;
         foreach (char item in text)
         {
@@ -88,7 +79,7 @@ internal class ConvertEveryWordLargeCharConvention
                 isNextUppercase = true;
             }
         }
-        string result = stringBuilder.ToString().Trim();
+        var result = stringBuilder.ToString().Trim();
 
         result = result.Replace("  ", " ");
         return result;

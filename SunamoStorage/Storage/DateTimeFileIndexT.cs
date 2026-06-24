@@ -1,56 +1,28 @@
 namespace SunamoStorage.Storage;
 
-/// <summary>
-/// Manages a date-time based file index for organizing and retrieving stored files.
-/// </summary>
-/// <typeparam name="StorageFolder">The type representing a storage folder.</typeparam>
-/// <typeparam name="StorageFile">The type representing a storage file.</typeparam>
 public class DateTimeFileIndexT<StorageFolder, StorageFile>
 {
-    /// <summary>
-    /// The abstract catalog used for storage operations.
-    /// </summary>
     public AbstractCatalogShared<StorageFolder, StorageFile> Catalog { get; set; } = null!;
 
-    /// <summary>
-    /// Raised when initialization of the file list is complete.
-    /// </summary>
     public event Action<List<FileNameWithDateTimeTU<StorageFolder, StorageFile>>>? InitComplete;
 
     private string? extension = null;
-    /// <summary>
-    /// The list of file entries with associated date-time metadata.
-    /// </summary>
     public List<FileNameWithDateTimeTU<StorageFolder, StorageFile>> Files { get; set; } = new List<FileNameWithDateTimeTU<StorageFolder, StorageFile>>();
     private FileEntriesDuplicitiesStrategy duplicityStrategy = FileEntriesDuplicitiesStrategy.Time;
     private LangsShared lang = LangsShared.cs;
 
 #pragma warning disable
-    /// <summary>
-    /// Returns the full path of the specified file entry.
-    /// </summary>
-    /// <param name="fileEntry">The file entry to resolve.</param>
-    /// <returns>The full path string, or null if not resolved.</returns>
     public string GetFullPath(FileNameWithDateTimeTU<StorageFolder, StorageFile> fileEntry)
     {
         return null;
     }
 #pragma warning restore
 
-    /// <summary>
-    /// Initializes a new empty instance of the file index.
-    /// </summary>
     public DateTimeFileIndexT()
     {
     }
 
-    /// <summary>
-    /// Initializes the file index with the given extension, duplicity strategy, and catalog.
-    /// A4 was nowhere used, deleted
-    /// </summary>
-    /// <param name="ext">The file extension to filter by.</param>
-    /// <param name="ds">The duplicity strategy for file entries.</param>
-    /// <param name="catalog">The abstract catalog for storage operations.</param>
+    // A4 was nowhere used, deleted
     public void Initialize(string ext, FileEntriesDuplicitiesStrategy ds, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
     {
         this.Catalog = catalog;
@@ -107,24 +79,13 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         }
     }
 
-    /// <summary>
-    /// Creates a file entry object from display rows and the current catalog.
-    /// </summary>
-    /// <param name="row1">The first display row text.</param>
-    /// <param name="row2">The second display row text.</param>
-    /// <param name="catalog">The abstract catalog for storage operations.</param>
-    /// <returns>A new file entry with parsed date-time and metadata.</returns>
     public FileNameWithDateTimeTU<StorageFolder, StorageFile> CreateObjectFileNameWithDateTime(string row1, string row2, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
     {
-        FileNameWithDateTimeTU<StorageFolder, StorageFile> entry = new FileNameWithDateTimeTU<StorageFolder, StorageFile>(row1, row2, catalog);
+        var entry = new FileNameWithDateTimeTU<StorageFolder, StorageFile>(row1, row2, catalog);
         string? fileNameWithoutExtension = null;
         string dateS = fileNameWithoutExtension!.Substring(0, 10);
         entry.DateTime = DateTime.ParseExact(dateS, "yyyy_MM_dd", null);
-        int? serie;
-        int hour;
-        int minute;
-        string postfix;
-        var strategy = GetFileEntriesDuplicitiesStrategy(fileNameWithoutExtension, out serie, out hour, out minute, out postfix);
+        var strategy = GetFileEntriesDuplicitiesStrategy(fileNameWithoutExtension, out int? serie, out int hour, out int minute, out string postfix);
         entry.Serie = serie;
         entry.DateTime.AddMinutes(minute);
         entry.DateTime.AddHours(hour);
@@ -157,7 +118,7 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
 
     private FileNameWithDateTimeTU<StorageFolder, StorageFile> CreateObjectFileNameWithDateTime(string row1, string row2, DateTime date, int? serie, string postfix, string fileNameWithoutExtension)
     {
-        FileNameWithDateTimeTU<StorageFolder, StorageFile> entry = new FileNameWithDateTimeTU<StorageFolder, StorageFile>(row1, row2, Catalog);
+        var entry = new FileNameWithDateTimeTU<StorageFolder, StorageFile>(row1, row2, Catalog);
         entry.DateTime = date;
         entry.Serie = serie;
         entry.Name = postfix;
@@ -170,10 +131,6 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         return SHReplace.ReplaceAll(FS.DeleteWrongCharsInFileName(fileNameWithoutExtension, false), "_", "");
     }
 
-    /// <summary>
-    /// Deletes the specified file entry from storage and removes it from the file list.
-    /// </summary>
-    /// <param name="fileEntry">The file entry to delete.</param>
     public void DeleteFile(FileNameWithDateTimeTU<StorageFolder, StorageFile> fileEntry)
     {
         try
@@ -189,28 +146,16 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
     }
 
 #pragma warning disable
-    /// <summary>
-    /// Gets the storage file path for the specified file entry.
-    /// </summary>
-    /// <param name="fileEntry">The file entry to resolve.</param>
-    /// <returns>The storage file path, or null if not resolved.</returns>
     public string GetStorageFile(FileNameWithDateTimeTU<StorageFolder, StorageFile> fileEntry)
     {
         return null;
     }
 #pragma warning restore
 
-    /// <summary>
-    /// Saves a file with a date-time based name using the duplicity strategy specified during initialization.
-    /// Does not add to the files collection directly; returns the created entry.
-    /// </summary>
-    /// <param name="name">The display name or postfix for the file.</param>
-    /// <param name="content">The file content to write.</param>
-    /// <returns>The created file entry with date-time metadata.</returns>
     public async Task<FileNameWithDateTimeTU<StorageFolder, StorageFile>> SaveFileWithDate(string name, string content)
     {
-        DateTime dateTime = DateTime.Now;
-        DateTime today = DateTime.Today;
+        var dateTime = DateTime.Now;
+        var today = DateTime.Today;
         string fileNameWithoutExtension = "";
         int? max = null;
         if (duplicityStrategy == FileEntriesDuplicitiesStrategy.Time)
@@ -235,8 +180,6 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         {
             // Unnecessary, already checked in constructor
         }
-#if DEBUG
-#endif
         var fileEntry = CreateObjectFileNameWithDateTime(GetDisplayText(dateTime, max, lang), name, dateTime, max, name, fileNameWithoutExtension);
         Files.Add(fileEntry);
         return fileEntry;
