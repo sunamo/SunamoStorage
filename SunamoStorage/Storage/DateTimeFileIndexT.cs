@@ -23,17 +23,17 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
     }
 
     // A4 was nowhere used, deleted
-    public void Initialize(string ext, FileEntriesDuplicitiesStrategy ds, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
+    public void Initialize(string ext, FileEntriesDuplicitiesStrategy duplicitiesStrategy, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
     {
         this.Catalog = catalog;
-        duplicityStrategy = ds;
+        duplicityStrategy = duplicitiesStrategy;
         extension = ext;
         string mask = "????_??_??_";
-        if (ds == FileEntriesDuplicitiesStrategy.Serie)
+        if (duplicitiesStrategy == FileEntriesDuplicitiesStrategy.Serie)
         {
             mask += "S_?*_";
         }
-        else if (ds == FileEntriesDuplicitiesStrategy.Time)
+        else if (duplicitiesStrategy == FileEntriesDuplicitiesStrategy.Time)
         {
             mask += "??_??_";
         }
@@ -46,7 +46,7 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         foreach (var item in storageFiles!)
         {
         }
-        if (ds == FileEntriesDuplicitiesStrategy.Serie)
+        if (duplicitiesStrategy == FileEntriesDuplicitiesStrategy.Serie)
         {
             Files.Sort(new CompareFileNameWithDateTimeBySerie<StorageFolder, StorageFile>().Desc);
         }
@@ -139,9 +139,9 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
             FS.TryDeleteFile(filePath);
             Files.Remove(fileEntry);
         }
-        catch (Exception ex)
+        catch (Exception exception)
         {
-            Console.WriteLine(ex.Message);
+            Console.WriteLine(exception.Message);
         }
     }
 
