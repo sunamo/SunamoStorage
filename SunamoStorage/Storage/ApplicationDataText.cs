@@ -1,7 +1,16 @@
 namespace SunamoStorage.Storage;
 
+/// <summary>
+/// Represents the application data text type.
+/// </summary>
 public class ApplicationDataText
 {
+    /// <summary>
+    /// Parse.
+    /// </summary>
+    /// <param name="file">The file.</param>
+    /// <param name="sections">The sections.</param>
+    /// <returns>The parse result.</returns>
     public static
 async Task<Dictionary<string, List<string>>>
 Parse(string file, List<string> sections)

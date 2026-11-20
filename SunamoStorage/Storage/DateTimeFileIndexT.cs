@@ -1,12 +1,24 @@
 namespace SunamoStorage.Storage;
 
+/// <summary>
+/// Represents the date time file index t storage folder storage file type.
+/// </summary>
 public class DateTimeFileIndexT<StorageFolder, StorageFile>
 {
+    /// <summary>
+    /// Gets or sets the catalog.
+    /// </summary>
     public AbstractCatalogShared<StorageFolder, StorageFile> Catalog { get; set; } = null!;
 
+    /// <summary>
+    /// The init complete.
+    /// </summary>
     public event Action<List<FileNameWithDateTimeTU<StorageFolder, StorageFile>>>? InitComplete;
 
     private string? extension = null;
+    /// <summary>
+    /// Gets or sets the files.
+    /// </summary>
     public List<FileNameWithDateTimeTU<StorageFolder, StorageFile>> Files { get; set; } = new List<FileNameWithDateTimeTU<StorageFolder, StorageFile>>();
     private FileEntriesDuplicitiesStrategy duplicityStrategy = FileEntriesDuplicitiesStrategy.Time;
     private LangsShared lang = LangsShared.cs;
@@ -18,11 +30,20 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
     }
 #pragma warning restore
 
+    /// <summary>
+    /// Date time file index t.
+    /// </summary>
+    /// <param name="fileEntry">The file entry.</param>
+    /// <returns>The date time file index t result.</returns>
     public DateTimeFileIndexT()
     {
     }
 
     // A4 was nowhere used, deleted
+    /// <summary>
+    /// Initialize.
+    /// </summary>
+    /// <returns>The initialize result.</returns>
     public void Initialize(string ext, FileEntriesDuplicitiesStrategy duplicitiesStrategy, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
     {
         this.Catalog = catalog;
@@ -79,6 +100,12 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         }
     }
 
+    /// <summary>
+    /// Create object file name with date time.
+    /// </summary>
+    /// <param name="11">The 11.</param>
+    /// <param name="5">The 5.</param>
+    /// <returns>The create object file name with date time result.</returns>
     public FileNameWithDateTimeTU<StorageFolder, StorageFile> CreateObjectFileNameWithDateTime(string row1, string row2, AbstractCatalogShared<StorageFolder, StorageFile> catalog)
     {
         var entry = new FileNameWithDateTimeTU<StorageFolder, StorageFile>(row1, row2, catalog);
@@ -131,6 +158,11 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         return SHReplace.ReplaceAll(FS.DeleteWrongCharsInFileName(fileNameWithoutExtension, false), "_", "");
     }
 
+    /// <summary>
+    /// Delete file.
+    /// </summary>
+    /// <param name="fileNameWithoutExtension">The file name without extension.</param>
+    /// <returns>The delete file result.</returns>
     public void DeleteFile(FileNameWithDateTimeTU<StorageFolder, StorageFile> fileEntry)
     {
         try
@@ -152,6 +184,11 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
     }
 #pragma warning restore
 
+    /// <summary>
+    /// Save file with date.
+    /// </summary>
+    /// <param name="fileEntry">The file entry.</param>
+    /// <returns>The save file with date result.</returns>
     public async Task<FileNameWithDateTimeTU<StorageFolder, StorageFile>> SaveFileWithDate(string name, string content)
     {
         var dateTime = DateTime.Now;
