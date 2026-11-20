@@ -39,7 +39,7 @@ public class DateTimeFileIndexT<StorageFolder, StorageFile>
         }
         else
         {
-            throw new Exception(Translate.FromKey(XlfKeys.NotSupportedStrategyOfSavingFiles) + ".");
+            throw new Exception("Not supported strategy of saving files" + ".");
         }
         mask += "*" + ext;
         List<StorageFile>? storageFiles = null;

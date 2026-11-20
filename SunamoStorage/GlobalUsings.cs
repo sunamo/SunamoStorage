@@ -29,7 +29,6 @@ global using SunamoStorage._public;
 global using SunamoStorage._public.SunamoData.Data;
 global using SunamoStorage._public.SunamoEnums.Enums;
 global using SunamoStorage._public.SunamoInterfaces.Interfaces;
-global using SunamoStorage._public.SunamoXlfKeys;
 global using SunamoStorage.Storage;
 global using System;
 global using System.Collections.Generic;
